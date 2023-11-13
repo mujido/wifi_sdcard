@@ -267,3 +267,8 @@ esp_err_t wifi_connect(void)
 #endif
     return wifi_sta_do_connect(wifi_config, true);
 }
+
+void wifi_wait_for_ip()
+{
+    xSemaphoreTake(s_semph_get_ip_addrs, portMAX_DELAY);
+}

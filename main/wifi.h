@@ -4,3 +4,4 @@
 
 esp_err_t wifi_connect();
 void wifi_shutdown();
+void wifi_wait_for_ip();
