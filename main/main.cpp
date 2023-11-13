@@ -24,10 +24,9 @@
 
 inline constexpr const char* TAG = "main.cpp";
 
-int smb2_ls_sync(char* user_url)
+int smb2_ls_sync()
 {
     struct smb2_context *smb2;
-    struct smb2_url *url;
     struct smb2dir *dir;
     struct smb2dirent *ent;
     char link[1024];
@@ -39,17 +38,14 @@ int smb2_ls_sync(char* user_url)
         return -1;
     }
 
-    url = smb2_parse_url(smb2, user_url);
-    if (url == NULL)
-    {
-        ESP_LOGI(TAG, "Failed to parse url: %s\n",
-               smb2_get_error(smb2));
-        return -1;
-    }
-
     smb2_set_security_mode(smb2, SMB2_NEGOTIATE_SIGNING_ENABLED);
 
-    if (smb2_connect_share(smb2, url->server, url->share, url->user) < 0)
+    int rc = smb2_connect_share(
+        smb2, 
+        CONFIG_WIFI_SDCARD_SMB_HOST, 
+        CONFIG_WIFI_SDCARD_SMB_SHARE, 
+        CONFIG_WIFI_SDCARD_SMB_USERNAME);
+    if (rc < 0)
     {
         ESP_LOGI(TAG, "smb2_connect_share failed. %s\n", smb2_get_error(smb2));
         return -1;
@@ -57,7 +53,7 @@ int smb2_ls_sync(char* user_url)
 
     ESP_LOGI(TAG, "Connected\n");
 
-    dir = smb2_opendir(smb2, url->path);
+    dir = smb2_opendir(smb2, "");
     if (dir == NULL)
     {
         ESP_LOGI(TAG, "smb2_opendir failed. %s\n", smb2_get_error(smb2));
@@ -68,12 +64,7 @@ int smb2_ls_sync(char* user_url)
 
     while ((ent = smb2_readdir(smb2, dir)))
     {
-        ESP_LOGI(TAG, "Got entry\n");
-
         const char *type;
-        time_t t;
-
-        t = (time_t)ent->st.smb2_mtime;
         switch (ent->st.smb2_type)
         {
         case SMB2_TYPE_LINK:
@@ -94,14 +85,7 @@ int smb2_ls_sync(char* user_url)
         {
             char buf[256];
 
-            if (url->path && url->path[0])
-            {
-                sprintf(link, "%s/%s", url->path, ent->name);
-            }
-            else
-            {
-                sprintf(link, "%s", ent->name);
-            }
+            sprintf(link, "/%s", ent->name);
             smb2_readlink(smb2, link, buf, 256);
             ESP_LOGI(TAG, "    -> [%s]\n", buf);
         }
@@ -111,7 +95,6 @@ int smb2_ls_sync(char* user_url)
 
     smb2_closedir(smb2, dir);
     smb2_disconnect_share(smb2);
-    smb2_destroy_url(url);
     smb2_destroy_context(smb2);
 
     return 0;
@@ -121,7 +104,7 @@ static void main_task(__unused void *params)
 {
     printf("Connecting to WiFi...\n");
 
-    smb2_ls_sync("smb://MUJIDO;guest@tequila.mujido.com/shared/");
+    smb2_ls_sync();
     vTaskDelete(NULL);
 }
 

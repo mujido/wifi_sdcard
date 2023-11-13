@@ -1,147 +1,177 @@
-menu "Example Connection Configuration"
+menu "Project Configuration"
 
-    config WIFI_SDCARD_SSID_PWD_FROM_STDIN
-        bool "Get ssid and password from stdin"
-        default n
-        help
-            Give the WiFi SSID and password from stdin.
+    menu "WIFI"
 
-    config WIFI_SDCARD_PROVIDE_WIFI_CONSOLE_CMD
-        depends on !WIFI_SDCARD_SSID_PWD_FROM_STDIN
-        bool "Provide wifi connect commands"
-        default y
-        help
-            Provide wifi connect commands for esp_console.
-            Please use `example_register_wifi_connect_commands` to register them.
-
-    config WIFI_SDCARD_SSID
-        depends on !WIFI_SDCARD_SSID_PWD_FROM_STDIN
-        string "WiFi SSID"
-        default "myssid"
-        help
-            SSID (network name) for the example to connect to.
-
-    config WIFI_SDCARD_PASSWORD
-        depends on !WIFI_SDCARD_SSID_PWD_FROM_STDIN
-        string "WiFi Password"
-        default "mypassword"
-        help
-            WiFi password (WPA or WPA2) for the example to use.
-            Can be left blank if the network has no security set.
-
-    config WIFI_SDCARD_CONN_MAX_RETRY
-        int "Maximum retry"
-        default 6
-        help
-            Set the Maximum retry to avoid station reconnecting to the AP unlimited,
-            in case the AP is really inexistent.
-
-    choice WIFI_SDCARD_SCAN_METHOD
-        prompt "WiFi Scan Method"
-        default WIFI_SDCARD_SCAN_METHOD_ALL_CHANNEL
-        help
-            WiFi scan method:
-
-            If "Fast" is selected, scan will end after find SSID match AP.
-
-            If "All Channel" is selected, scan will end after scan all the channel.
-
-        config WIFI_SDCARD_SCAN_METHOD_FAST
-            bool "Fast"
-        config WIFI_SDCARD_SCAN_METHOD_ALL_CHANNEL
-            bool "All Channel"
-    endchoice
-
-    menu "WiFi Scan threshold"
-        config WIFI_SDCARD_SCAN_RSSI_THRESHOLD
-            int "WiFi minimum rssi"
-            range -127 0
-
-            default -127
+        config WIFI_SDCARD_SSID_PWD_FROM_STDIN
+            bool "Get ssid and password from stdin"
+            default n
             help
-                The minimum rssi to accept in the scan mode.
+                Give the WiFi SSID and password from stdin.
 
-        choice WIFI_SDCARD_SCAN_AUTH_MODE_THRESHOLD
-            prompt "WiFi Scan auth mode threshold"
-            default WIFI_SDCARD_AUTH_OPEN
+        config WIFI_SDCARD_PROVIDE_WIFI_CONSOLE_CMD
+            depends on !WIFI_SDCARD_SSID_PWD_FROM_STDIN
+            bool "Provide wifi connect commands"
+            default y
             help
-                The weakest authmode to accept in the scan mode.
+                Provide wifi connect commands for esp_console.
+                Please use `example_register_wifi_connect_commands` to register them.
 
-            config WIFI_SDCARD_AUTH_OPEN
-                bool "OPEN"
-            config WIFI_SDCARD_AUTH_WEP
-                bool "WEP"
-            config WIFI_SDCARD_AUTH_WPA_PSK
-                bool "WPA PSK"
-            config WIFI_SDCARD_AUTH_WPA2_PSK
-                bool "WPA2 PSK"
-            config WIFI_SDCARD_AUTH_WPA_WPA2_PSK
-                bool "WPA WPA2 PSK"
-            config WIFI_SDCARD_AUTH_WPA2_ENTERPRISE
-                bool "WPA2 ENTERPRISE"
-            config WIFI_SDCARD_AUTH_WPA3_PSK
-                bool "WPA3 PSK"
-            config WIFI_SDCARD_AUTH_WPA2_WPA3_PSK
-                bool "WPA2 WPA3 PSK"
-            config WIFI_SDCARD_AUTH_WAPI_PSK
-                bool "WAPI PSK"
+        config WIFI_SDCARD_SSID
+            depends on !WIFI_SDCARD_SSID_PWD_FROM_STDIN
+            string "WiFi SSID"
+            default "myssid"
+            help
+                SSID (network name) for the example to connect to.
+
+        config WIFI_SDCARD_PASSWORD
+            depends on !WIFI_SDCARD_SSID_PWD_FROM_STDIN
+            string "WiFi Password"
+            default "mypassword"
+            help
+                WiFi password (WPA or WPA2) for the example to use.
+                Can be left blank if the network has no security set.
+
+        config WIFI_SDCARD_CONN_MAX_RETRY
+            int "Maximum retry"
+            default 6
+            help
+                Set the Maximum retry to avoid station reconnecting to the AP unlimited,
+                in case the AP is really inexistent.
+
+        choice WIFI_SDCARD_SCAN_METHOD
+            prompt "WiFi Scan Method"
+            default WIFI_SDCARD_SCAN_METHOD_ALL_CHANNEL
+            help
+                WiFi scan method:
+
+                If "Fast" is selected, scan will end after find SSID match AP.
+
+                If "All Channel" is selected, scan will end after scan all the channel.
+
+            config WIFI_SDCARD_SCAN_METHOD_FAST
+                bool "Fast"
+            config WIFI_SDCARD_SCAN_METHOD_ALL_CHANNEL
+                bool "All Channel"
         endchoice
 
-        choice WIFI_SDCARD_CONNECT_AP_SORT_METHOD
-            prompt "WiFi Connect AP Sort Method"
-            default WIFI_SDCARD_CONNECT_AP_BY_SIGNAL
+        menu "WiFi Scan threshold"
+            config WIFI_SDCARD_SCAN_RSSI_THRESHOLD
+                int "WiFi minimum rssi"
+                range -127 0
+
+                default -127
+                help
+                    The minimum rssi to accept in the scan mode.
+
+            choice WIFI_SDCARD_SCAN_AUTH_MODE_THRESHOLD
+                prompt "WiFi Scan auth mode threshold"
+                default WIFI_SDCARD_AUTH_OPEN
+                help
+                    The weakest authmode to accept in the scan mode.
+
+                config WIFI_SDCARD_AUTH_OPEN
+                    bool "OPEN"
+                config WIFI_SDCARD_AUTH_WEP
+                    bool "WEP"
+                config WIFI_SDCARD_AUTH_WPA_PSK
+                    bool "WPA PSK"
+                config WIFI_SDCARD_AUTH_WPA2_PSK
+                    bool "WPA2 PSK"
+                config WIFI_SDCARD_AUTH_WPA_WPA2_PSK
+                    bool "WPA WPA2 PSK"
+                config WIFI_SDCARD_AUTH_WPA2_ENTERPRISE
+                    bool "WPA2 ENTERPRISE"
+                config WIFI_SDCARD_AUTH_WPA3_PSK
+                    bool "WPA3 PSK"
+                config WIFI_SDCARD_AUTH_WPA2_WPA3_PSK
+                    bool "WPA2 WPA3 PSK"
+                config WIFI_SDCARD_AUTH_WAPI_PSK
+                    bool "WAPI PSK"
+            endchoice
+
+            choice WIFI_SDCARD_CONNECT_AP_SORT_METHOD
+                prompt "WiFi Connect AP Sort Method"
+                default WIFI_SDCARD_CONNECT_AP_BY_SIGNAL
+                help
+                    WiFi connect AP sort method:
+
+                    If "Signal" is selected, Sort matched APs in scan list by RSSI.
+
+                    If "Security" is selected, Sort matched APs in scan list by security mode.
+
+                config WIFI_SDCARD_CONNECT_AP_BY_SIGNAL
+                    bool "Signal"
+                config WIFI_SDCARD_CONNECT_AP_BY_SECURITY
+                    bool "Security"
+            endchoice
+        endmenu
+
+        config WIFI_SDCARD_CONNECT_IPV6
+            bool "Obtain IPv6 address"
+            default y
+            select LWIP_IPV6
             help
-                WiFi connect AP sort method:
+                By default, examples will wait until IPv4 and IPv6 local link addresses are obtained.
+                Disable this option if the network does not support IPv6.
+                Choose the preferred IPv6 address type if the connection code should wait until other than
+                the local link address gets assigned.
+                Consider enabling IPv6 stateless address autoconfiguration (SLAAC) in the LWIP component.
 
-                If "Signal" is selected, Sort matched APs in scan list by RSSI.
+        if WIFI_SDCARD_CONNECT_IPV6
+            choice WIFI_SDCARD_CONNECT_PREFERRED_IPV6
+                prompt "Preferred IPv6 Type"
+                default WIFI_SDCARD_CONNECT_IPV6_PREF_LOCAL_LINK
+                help
+                    Select which kind of IPv6 address the connect logic waits for.
 
-                If "Security" is selected, Sort matched APs in scan list by security mode.
+                config WIFI_SDCARD_CONNECT_IPV6_PREF_LOCAL_LINK
+                    bool "Local Link Address"
+                    help
+                        Blocks until Local link address assigned.
 
-            config WIFI_SDCARD_CONNECT_AP_BY_SIGNAL
-                bool "Signal"
-            config WIFI_SDCARD_CONNECT_AP_BY_SECURITY
-                bool "Security"
-        endchoice
+                config WIFI_SDCARD_CONNECT_IPV6_PREF_GLOBAL
+                    bool "Global Address"
+                    help
+                        Blocks until Global address assigned.
+
+                config WIFI_SDCARD_CONNECT_IPV6_PREF_SITE_LOCAL
+                    bool "Site Local Address"
+                    help
+                        Blocks until Site link address assigned.
+
+                config WIFI_SDCARD_CONNECT_IPV6_PREF_UNIQUE_LOCAL
+                    bool "Unique Local Link Address"
+                    help
+                        Blocks until Unique local address assigned.
+
+            endchoice
+        endif
     endmenu
 
-    config WIFI_SDCARD_CONNECT_IPV6
-        bool "Obtain IPv6 address"
-        default y
-        select LWIP_IPV6
-        help
-            By default, examples will wait until IPv4 and IPv6 local link addresses are obtained.
-            Disable this option if the network does not support IPv6.
-            Choose the preferred IPv6 address type if the connection code should wait until other than
-            the local link address gets assigned.
-            Consider enabling IPv6 stateless address autoconfiguration (SLAAC) in the LWIP component.
+    menu "SMB"
+        config WIFI_SDCARD_SMB_HOST
+            string "SMB Host/IP"
+            default "host"
+            help 
+                Host to connect for SMB
 
-    if WIFI_SDCARD_CONNECT_IPV6
-        choice WIFI_SDCARD_CONNECT_PREFERRED_IPV6
-            prompt "Preferred IPv6 Type"
-            default WIFI_SDCARD_CONNECT_IPV6_PREF_LOCAL_LINK
-            help
-                Select which kind of IPv6 address the connect logic waits for.
+        config WIFI_SDCARD_SMB_SHARE
+            string "SMB Share"
+            default "share"
+            help 
+                SMB share to access
 
-            config WIFI_SDCARD_CONNECT_IPV6_PREF_LOCAL_LINK
-                bool "Local Link Address"
-                help
-                    Blocks until Local link address assigned.
+        config WIFI_SDCARD_SMB_USERNAME
+            string "SMB Username"
+            default "guest"
+            help 
+                SMB user to authenticate
 
-            config WIFI_SDCARD_CONNECT_IPV6_PREF_GLOBAL
-                bool "Global Address"
-                help
-                    Blocks until Global address assigned.
+        config WIFI_SDCARD_SMB_PASSWORD
+            string "SMB Password"
+            default ""
+            help 
+                SMB password authenticate
 
-            config WIFI_SDCARD_CONNECT_IPV6_PREF_SITE_LOCAL
-                bool "Site Local Address"
-                help
-                    Blocks until Site link address assigned.
-
-            config WIFI_SDCARD_CONNECT_IPV6_PREF_UNIQUE_LOCAL
-                bool "Unique Local Link Address"
-                help
-                    Blocks until Unique local address assigned.
-
-        endchoice
-    endif
+    endmenu
 endmenu
