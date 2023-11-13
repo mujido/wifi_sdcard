@@ -1,3 +1,11 @@
+//
+// @project     wifi_sdcard
+//
+// @author      Kurt Stutsman <kstutsman@gmail.com>
+//
+// @license     Apache-2.0
+//
+
 #include <esp_wifi.h>
 #include <esp_netif.h>
 #include <esp_log.h>
