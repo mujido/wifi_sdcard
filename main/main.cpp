@@ -121,7 +121,7 @@ static void main_task(__unused void *params)
 {
     printf("Connecting to WiFi...\n");
 
-    smb2_ls_sync("smb://MUJIDO;guest@192.168.87.4/shared/");
+    smb2_ls_sync("smb://MUJIDO;guest@tequila.mujido.com/shared/");
     vTaskDelete(NULL);
 }
 
