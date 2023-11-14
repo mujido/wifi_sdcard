@@ -88,7 +88,7 @@ static void on_wifi_connect(void *esp_netif, esp_event_base_t event_base,
                             int32_t event_id, void *event_data)
 {
 #if CONFIG_WIFI_SDCARD_CONNECT_IPV6
-    esp_netif_create_ip6_linklocal(esp_netif);
+    esp_netif_create_ip6_linklocal(reinterpret_cast<esp_netif_t*>(esp_netif));
 #endif
 }
 
@@ -110,12 +110,9 @@ static void example_handler_on_sta_got_ipv6(void *arg, esp_event_base_t event_ba
                         int32_t event_id, void *event_data)
 {
     ip_event_got_ip6_t *event = (ip_event_got_ip6_t *)event_data;
-    if (!example_is_our_netif(WIFI_SDCARD_NETIF_DESC_STA, event->esp_netif)) {
-        return;
-    }
     esp_ip6_addr_type_t ipv6_type = esp_netif_ip6_get_addr_type(&event->ip6_info.ip);
-    ESP_LOGI(TAG, "Got IPv6 event: Interface \"%s\" address: " IPV6STR ", type: %s", esp_netif_get_desc(event->esp_netif),
-             IPV62STR(event->ip6_info.ip), example_ipv6_addr_types_to_str[ipv6_type]);
+    ESP_LOGI(TAG, "Got IPv6 event: Interface \"%s\" address: " IPV6STR ", type: %d", esp_netif_get_desc(event->esp_netif),
+             IPV62STR(event->ip6_info.ip), static_cast<int>(ipv6_type));
 
     if (ipv6_type == WIFI_SDCARD_CONNECT_PREFERRED_IPV6_TYPE) {
         if (s_semph_get_ip6_addrs) {
